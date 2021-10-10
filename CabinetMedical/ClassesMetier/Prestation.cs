@@ -5,6 +5,7 @@
 namespace CabinetMedical.ClassesMetier
 {
     using System;
+    using System.Collections.Generic;
     using CabinetMedical.Exceptions;
 
     /// <summary>
@@ -16,6 +17,10 @@ namespace CabinetMedical.ClassesMetier
         private DateTime dateHeuresoins;
         private Intervenant intervenant;
         private IntervenantExterne intervenantE;
+        private Nomenclature nomenclature;
+        private List<Nomenclature> nomenclatures;
+        private Dictionary<int, Nomenclature> ids;
+        private int prix;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Prestation"/> class.
@@ -39,17 +44,24 @@ namespace CabinetMedical.ClassesMetier
         /// <param name="libelle">libelle.</param>
         /// <param name="dateHeureSoin">dateHeureSoin.</param>
         /// <param name="intervenant">intervenant.</param>
-        public Prestation(string libelle, DateTime dateHeureSoin, Intervenant intervenant)
+        /// <param name="nomenclature">nomenclature.</param>
+        public Prestation(string libelle, DateTime dateHeureSoin, Intervenant intervenant, Nomenclature nomenclature)
         {
             this.libelle = libelle;
             this.dateHeuresoins = dateHeureSoin;
             this.intervenant = intervenant;
+            this.nomenclature = nomenclature;
+            this.nomenclatures = new List<Nomenclature>();
+            this.ids = new Dictionary<int, Nomenclature>();
+            this.ids.Add(nomenclature.Id, nomenclature);
+            this.nomenclatures.Add(nomenclature);
+            this.prix = nomenclature.Indice;
         }
 
         /// <summary>
         /// Gets.
         /// </summary>
-        public Intervenant UnIntervenant { get => this.intervenant; }
+        public Intervenant Intervenant { get => this.intervenant; }
 
         /// <summary>
         /// Gets.
@@ -62,6 +74,21 @@ namespace CabinetMedical.ClassesMetier
         public DateTime DateHeuresoins { get => this.dateHeuresoins; }
 
         /// <summary>
+        /// Gets.
+        /// </summary>
+        public int Prix { get => this.prix; }
+
+        /// <summary>
+        /// Gets.
+        /// </summary>
+        public Nomenclature Nomenclature { get => this.nomenclature; }
+
+        /// <summary>
+        /// Gets.
+        /// </summary>
+        public List<Nomenclature> Nomenclatures { get => this.nomenclatures; }
+
+        /// <summary>
         /// compare deux date de prestation.
         /// </summary>
         /// <param name="prestation1">prestation1.</param>
@@ -70,6 +97,31 @@ namespace CabinetMedical.ClassesMetier
         public static int CompareTo(Prestation prestation1, Prestation prestation2)
         {
             return DateTime.Compare(prestation1.dateHeuresoins.Date, prestation2.dateHeuresoins.Date);
+        }
+
+        /// <summary>
+        /// Ajout d'une Nomenclature à une liste de Nomenclature.
+        /// </summary>Nomenclature
+        /// <param name="nomenclature">Objet de la class.</param>
+        public void AddNomenclature(Nomenclature nomenclature)
+        {
+            this.nomenclatures.Add(nomenclature);
+            this.ids.Add(nomenclature.Id, nomenclature);
+            int lastindex = this.nomenclatures.Count;
+            this.prix += lastindex * nomenclature.Indice;
+        }
+
+        /// <summary>
+        /// Ajout d'une Nomenclature à une liste de Nomenclature.
+        /// </summary>Nomenclature
+        /// <param name="nomenclature">Objet de la class.</param>
+        public void AddNomenclature(List<Nomenclature> nomenclature)
+        {
+            foreach (Nomenclature nomenclature1 in nomenclature)
+            {
+                this.ids.Add(nomenclature1.Id, nomenclature1);
+                this.nomenclatures.Add(nomenclature1);
+            }
         }
 
         /// <summary>
