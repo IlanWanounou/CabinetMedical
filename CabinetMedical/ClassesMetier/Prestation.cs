@@ -1,4 +1,4 @@
-﻿// <copyright file="Prestation.cs" company="Ilan">
+// <copyright file="Prestation.cs" company="Ilan">
 // Copyright (c) Ilan. All rights reserved.
 // </copyright>
 
@@ -18,8 +18,7 @@ namespace CabinetMedical.ClassesMetier
         private Intervenant intervenant;
         private IntervenantExterne intervenantE;
         private Nomenclature nomenclature;
-        private List<Nomenclature> nomenclatures;
-        private Dictionary<int, Nomenclature> ids;
+        private Dictionary<int, Nomenclature> nomenclatures;
         private int prix;
 
         /// <summary>
@@ -51,10 +50,8 @@ namespace CabinetMedical.ClassesMetier
             this.dateHeuresoins = dateHeureSoin;
             this.intervenant = intervenant;
             this.nomenclature = nomenclature;
-            this.nomenclatures = new List<Nomenclature>();
-            this.ids = new Dictionary<int, Nomenclature>();
-            this.ids.Add(nomenclature.Id, nomenclature);
-            this.nomenclatures.Add(nomenclature);
+            this.nomenclatures = new Dictionary<int, Nomenclature>();
+            this.nomenclatures.Add(nomenclature.Id, nomenclature);
             this.prix = nomenclature.Indice;
         }
 
@@ -86,7 +83,7 @@ namespace CabinetMedical.ClassesMetier
         /// <summary>
         /// Gets.
         /// </summary>
-        public List<Nomenclature> Nomenclatures { get => this.nomenclatures; }
+        public Dictionary<int, Nomenclature> Nomenclatures { get => this.nomenclatures;  }
 
         /// <summary>
         /// compare deux date de prestation.
@@ -105,8 +102,7 @@ namespace CabinetMedical.ClassesMetier
         /// <param name="nomenclature">Objet de la class.</param>
         public void AddNomenclature(Nomenclature nomenclature)
         {
-            this.nomenclatures.Add(nomenclature);
-            this.ids.Add(nomenclature.Id, nomenclature);
+            this.nomenclatures.Add(nomenclature.Id, nomenclature);
             int lastindex = this.nomenclatures.Count;
             this.prix += lastindex * nomenclature.Indice;
         }
@@ -119,8 +115,10 @@ namespace CabinetMedical.ClassesMetier
         {
             foreach (Nomenclature nomenclature1 in nomenclature)
             {
-                this.ids.Add(nomenclature1.Id, nomenclature1);
-                this.nomenclatures.Add(nomenclature1);
+                this.nomenclatures.Add(nomenclature1.Id, nomenclature1);
+                int lastindex = this.nomenclatures.Count;
+                this.prix += lastindex * nomenclature1.Indice;
+
             }
         }
 
